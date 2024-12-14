@@ -7,9 +7,8 @@ import formatTimeDifference from '../hooks/formateTime'
 import { currentUser } from '../api/authentication/authApi'
 
 function ProfileVideos() {
-  const [hasVideo, setHasVideo] = useState(true)
-  const showUploadVideo = useHandleCssStore((state) => state.showUploadVideo)
-  const [videos, setVideos] = useState(null)
+  const [hasVideo, setHasVideo] = useState(false)
+  const [videos, setVideos] = useState([])
   const currentUserData = userData((state) => state.currentUserData)
 
   const navigate = useNavigate()
@@ -22,26 +21,46 @@ function ProfileVideos() {
 
   useEffect(() => {
     async function processFetch() {
-      // console.log(currentUserData);
-
-      const response = await getAllVideosOfaUser(currentUserData._id)
-      // console.log('response',response);
-
+      const response = await getAllVideosOfaUser(currentUserData?._id)
+      console.log('response', response)
+      setHasVideo(true)
       setVideos(response?.data?.data?.videos)
     }
     processFetch()
   }, [currentUserData])
 
-  // console.log(videos);
-
-
-
   function navigateAndToggle() {
-    showUploadVideo("block")
     navigate("/dashboard")
   }
 
-  return hasVideo ? (
+  console.log(videos)
+
+  if (videos?.length == 0) {
+    return videos?.length === 0 && (<div className='flex h-[15rem] justify-center flex-col text-white items-center'>
+      <div className='flex flex-col justify-center items-center w-[18rem] gap-2'>
+        <p>
+          <img className='bg-[#45434370] p-2 rounded-full' src="/play.svg" alt="" />
+        </p>
+
+        <p>No videos uploaded</p>
+        <p className='text-sm text-center'>{currentUser ? 'click to upload new video. you have yet to upload a video' : 'This page yet to upload a video search another page in order to find more videos'}</p>
+
+        {currentUser &&
+          <div>
+            <div>
+              <button onClick={navigateAndToggle} className='text-[#c6c1c1] bg-[rgb(102,31,189)] font-medium rounded-sm text-sm px-5 py-1.5 focus:outline-none flex gap-3 uploadVideoBtn'>
+                <img src="/plus.svg" alt="" />
+                New Video
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    )
+  }
+
+  return (
     <div>
       <div className='right w-full overflow-hidden'>
         <div className='max-w-full ml-0 items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 cursor-pointer'>
@@ -59,7 +78,6 @@ function ProfileVideos() {
                       <div className='flex gap-2 items-baseline'>
                         <div className="text-lg">{value?.title.length > 30 ? value.title.substring(0, 30) + '...' : value.title}</div>
                         <div>
-                          {/* <img className='hover:bg-[#162b45] hover:rounded-full w-9' id='dot' src="/dots.svg" alt="" /> */}
                         </div>
                       </div>
                       <p className="leading-none text-[#a1a1a1]">{value?.description.length > 90 ? value.description.substring(0, 90) + "..." : value.description}</p>
@@ -76,27 +94,7 @@ function ProfileVideos() {
         </div>
       </div>
     </div>
-  ) : <div className='flex h-[15rem] justify-center flex-col text-white items-center'>
-    <div className='flex flex-col justify-center items-center w-[18rem] gap-2'>
-      <p>
-        <img className='bg-[#45434370] p-2 rounded-full' src="/play.svg" alt="" />
-      </p>
-
-      <p>No videos uploaded</p>
-      <p className='text-sm text-center'>{currentUser ? 'click to upload new video. you have yet to upload a video' : 'This page yet to upload a video search another page in order to find more videos'}</p>
-
-      {currentUser &&
-        <div>
-          <div>
-            <button onClick={navigateAndToggle} className='text-[#c6c1c1] bg-[rgb(102,31,189)] font-medium rounded-sm text-sm px-5 py-1.5 focus:outline-none flex gap-3 uploadVideoBtn'>
-              <img src="/plus.svg" alt="" />
-              New Video
-            </button>
-          </div>
-        </div>
-      }
-    </div>
-  </div>
+  )
 }
 
 export default ProfileVideos

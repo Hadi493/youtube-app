@@ -11,6 +11,7 @@ function Header() {
   const toggleSideBar = useHandleCssStore((state) => state.toggleSideBar)
   const coverAll = useHandleCssStore((state) => state.coverAll)
   const handleClickOutside = useHandleCssStore((state) => state.handleClickOutside)
+  const showUploadVideo = useHandleCssStore((state) => state.showUploadVideo)
   const [mobileSearch, setMobileSearch] = useState("hidden")
   const [headerClass, setHeaderClass] = useState("block")
   const navigate = useNavigate()
@@ -62,6 +63,8 @@ function Header() {
     if (location.pathname !== "/dashboard/videoDashboard") {
       navigate("/dashboard/videoDashboard");
     }
+    showUploadVideo(true)
+    // console.log(true)
   }
 
   function searchVideo(e) {

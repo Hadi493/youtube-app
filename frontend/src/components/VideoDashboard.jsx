@@ -5,22 +5,14 @@ import UploadVideo from '../subComponents/UploadVideo'
 import useHandleCssStore from '../zustand/useHandleCssStore';
 
 function VideoDashboard() {
-  const showUploadVideoCss = useHandleCssStore((state) => state.showUploadVideoCss)
-  const showUploadVideo = useHandleCssStore((state) => state.showUploadVideo)
   const [hidden, setHidden] = useState("hidden")
   const [toggleDelete, setToggleDelete] = useState("hidden")
+  const showUploadVideoCss = useHandleCssStore((state) => state.showUploadVideoCss)
+  const showUploadVideo = useHandleCssStore((state) => state.showUploadVideo)
+  console.log(showUploadVideoCss)
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (e.target.closest("#uploadVideo") && !e.target.closest(".uploadVideoBtn")) {
-        showUploadVideo("block")
-        // // console.log(e.target);
-
-      }
-      else if (!e.target.closest(".uploadVideoBtn")) {
-        showUploadVideo("hidden")
-      }
-
       if (e.target.closest("#updateVideo") && !e.target.closest(".CloseUpdateVideo")) {
         setHidden("block")
       } else if (!e.target.closest(".pen")) {
@@ -167,8 +159,12 @@ function VideoDashboard() {
         </div>
       </div>
 
-      <div className={`text-white ${showUploadVideoCss}`}>
-        <UploadVideo />
+      <div className='text-white'>
+        {showUploadVideoCss && <>
+          <div className='fixed top-32 left-0 right-0 bg-[#1919197c] h-screen w-screen' onClick={()=> showUploadVideo(false)}></div>
+          <UploadVideo />
+        </>
+        }
       </div>
 
       <div>

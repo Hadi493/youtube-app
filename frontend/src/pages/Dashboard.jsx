@@ -13,10 +13,8 @@ function Dashboard() {
   return isUserFlag ? (
     <Wrapper>
       <div className='text-white'>
-        <nav className="bg-gray-50 dark:bg-[#13151a] w-full top-14 left-0 fixed z-10">
+        <nav className="bg-gray-50 dark:bg-[#18181b] w-full top-14 left-0 fixed z-10">
           <div className="px-4 py-4 flex justify-between items-center">
-            {/* Left section (Logo or Title) */}
-            {/* Right section (Nav Links) */}
             <ul className="flex space-x-4 font-medium flex-wrap">
               <li className='sm:text-lg text-[9px]'>
                 <Link
