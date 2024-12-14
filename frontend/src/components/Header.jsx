@@ -14,14 +14,13 @@ function Header() {
   const [mobileSearch, setMobileSearch] = useState("hidden")
   const [headerClass, setHeaderClass] = useState("block")
   const navigate = useNavigate()
-  const showUploadVideo = useHandleCssStore((state) => state.showUploadVideo)
   const [dropDownCss, setDropDownCss] = useState("hidden")
   const [searchValue, setSearchValue] = useState("")
   const setSearchData = videoStore((state) => state.setSearchData)
   const setCurrentUserData = userData((state) => state.setCurrentUserData)
   const currentUserData = userData((state) => state.currentUserData)
-  const storegeResponse = sessionStorage.getItem('isLogin')
-  const isLogin = JSON.parse(storegeResponse)
+  const storageResponse = sessionStorage.getItem('isLogin')
+  const isLogin = JSON.parse(storageResponse)
 
   useEffect(() => {
     handleClickOutside()
@@ -63,7 +62,6 @@ function Header() {
     if (location.pathname !== "/dashboard/videoDashboard") {
       navigate("/dashboard/videoDashboard");
     }
-    showUploadVideo("block")
   }
 
   function searchVideo(e) {
@@ -75,9 +73,15 @@ function Header() {
     }
   }
 
-  function logout(params) {
-    SignOut()
-    setCurrentUserData(null)
+  function toggleLoginOut() {
+    if (isLogin) {
+      SignOut()
+      setCurrentUserData(null)
+      sessionStorage.removeItem('isLogin')
+      navigate('/')
+    } else {
+      navigate('/login')
+    }
   }
 
   return (
@@ -124,31 +128,39 @@ function Header() {
                   : <img className='relative cursor-pointer userDropdownBtn' src="/avatar.svg" alt="" />
                 }
 
-                <div id="userDropdown" className={`z-10 ${dropDownCss} absolute right-7 bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-[#252934] dark:divide-gray-600 top-14`}>
-                  <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                    <div className='flex items-center gap-2'>
-                      <img src="https://th.bing.com/th/id/OIP.7ITF2gx8_a3s4NbnDOpZzAHaHa?w=238&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7" className='w-9 h-9 rounded-full' alt="" />
-                      <div>
-                        <div>Bonnie Green</div>
-                        <div className="font-medium truncate">name@flowbite.com</div>
+                {isLogin?
+                  <div id="userDropdown" className={`z-10 ${dropDownCss} absolute right-7 bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-[#252934] dark:divide-gray-600 top-14`}>
+                    <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                      <div className='flex items-center gap-2'>
+                        <img src={currentUserData?.avatar} className='w-9 h-9 rounded-full' alt="" />
+                        <div>
+                          <div>{currentUserData?.fullName}</div>
+                          <div className="font-medium truncate">{'@' + currentUserData?.username}</div>
+                        </div>
                       </div>
                     </div>
+                    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+                      <li>
+                        <button onClick={DashboardFunc} className="block w-full text-left px-4 py-2 SelectedLinks hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</button>
+                      </li>
+                      <li>
+                        <Link to={""} className="block px-4 py-2 SelectedLinks hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</Link>
+                      </li>
+                      <li>
+                        <Link to={""} className="block px-4 py-2 SelectedLinks hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</Link>
+                      </li>
+                    </ul>
+                    <div className="py-1">
+                      <li onClick={toggleLoginOut} className="block px-4 py-2 SelectedLinks cursor-pointer text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">{isLogin ? 'Sign out' : 'Login'}</li>
+                    </div>
                   </div>
-                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
-                    <li>
-                      <button onClick={DashboardFunc} className="block w-full text-left px-4 py-2 SelectedLinks hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</button>
-                    </li>
-                    <li>
-                      <Link to={""} className="block px-4 py-2 SelectedLinks hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</Link>
-                    </li>
-                    <li>
-                      <Link to={""} className="block px-4 py-2 SelectedLinks hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</Link>
-                    </li>
-                  </ul>
+                  :
+                  <div id="userDropdown" className={`z-10 ${dropDownCss} absolute right-7 bg-white divide-y divide-gray-100 rounded-lg shadow w-28 dark:bg-[#252934] dark:divide-gray-600 top-14`}>
                   <div className="py-1">
-                    <Link to={"/login"} onClick={logout} className="block px-4 py-2 SelectedLinks text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</Link>
+                    <li onClick={toggleLoginOut} className="block px-4 py-2 SelectedLinks cursor-pointer text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white text-base">Login</li>
                   </div>
                 </div>
+                }
               </div>
             </div>
           </div>
@@ -161,18 +173,18 @@ function Header() {
               <button onClick={backToHeader}>
                 <img src="/leftArrow.svg" alt="" />
               </button>
-              <form onSubmit={searchVideo}>
+              {/* <form onSubmit={searchVideo}> */}
                 <Input
                   className="w-[80vw] md:block  rounded-full bg-[#13131497] h-11 px-5 text-[1.1rem] outline-none border-[#8d8d8d8b] border-[1px] text-white"
                   placeholder="Search"
                   onChange={(e) => setSearchValue(e.target.value)}
                 />
-              </form>
+              {/* </form> */}
             </div>
             <div>
-              {/* <button className={`${mobileSearch == 'hidden' ? 'absolute text-center ml-[-3rem] mt-[0.60rem]' : "hidden text-center ml-[-3rem] mt-[0.60rem]"}`}>
+              <button className={`${mobileSearch !== 'hidden' ? 'absolute text-center ml-[-3rem] mt-[0.60rem]' : "hidden text-center ml-[-3rem] mt-[0.60rem]"}`} onClick={searchVideo}>
                 <img className='' src="/search.svg" alt="" />
-              </button> */}
+              </button>
             </div>
           </div>
         </div>

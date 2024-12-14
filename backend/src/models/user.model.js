@@ -12,6 +12,11 @@ const userSchema = new Schema(
             trim: true,
             index: true
         },
+        role:{
+            type: String,
+            reqired: true,
+            lowercase: true,
+        },
         email: {
             type: String,
             required: true,

@@ -81,6 +81,8 @@ const publishAVideo = asyncHandler(async (req, res) => {
     const video = req.files?.videoFile[0]?.path
     const thumbnail = req.files?.thumbnail && req.files.thumbnail[0]?.path;
     const isThumbnail = thumbnail ? true : false
+    const {role} = req.user
+    console.log('role',role)
 
     const { videoUrlId, duration, result, url } = await uploadVideosToBucket(video, isThumbnail)
 
