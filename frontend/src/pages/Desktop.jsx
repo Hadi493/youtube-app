@@ -79,7 +79,7 @@ function Desktop() {
     );
   }
 
-  return (
+  return currentUserData.isUser?(
     <div className=''>
       <div>
         <div className='sm:left-[8px] sm:top-20 fixed sm:hidden z-40 sm:z-0 lg:block bottom-[0px] lg:bottom-auto w-full lg:w-[5rem]'>
@@ -87,7 +87,7 @@ function Desktop() {
         </div>
       </div>
 
-      {currentUserData.isUser ?
+      {currentUserData.loading == false ?
         <div>
           <div className='lg:ml-[6rem]'>
 
@@ -209,11 +209,9 @@ function Desktop() {
             </div>
           </div>
         </div>
-
-
       }
     </div>
-  )
+  ): <div className='text-white'>loading...</div>
 }
 
 export default Desktop
