@@ -1,8 +1,11 @@
 import { Outlet } from 'react-router-dom'
 import Header from '../components/Header'
 import CurrentUser from '../api/authentication/CurrentUser'
+import { useNavigate } from 'react-router-dom'
+import { useCallback } from 'react'
 
 function OutletComp() {
+
     CurrentUser()
 
     return (

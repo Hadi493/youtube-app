@@ -10,27 +10,25 @@ function CurrentUser() {
 
     useEffect(() => {
         const controller = new AbortController()
-        let isMounted = true
+
         async function getUser() {
+            setCurrentUserData({ data: null, loading: true, isUser: false })
             try {
                 const response = await PrivetBaseUrl.get("/users/current-user", {
                     withCredentials: true,
                     signal: controller.signal
                 })
 
-                // if (response) {
+                console.log('response', response)
+                setCurrentUserData({ data: response.data.data, loading: false, isUser: Boolean(response.data.data) })
 
-                // }
+                return response.data
 
-
-                if (isMounted) {
-                    setCurrentUserData(response.data.data)
-                    return response.data
-                }
             } catch (error) {
-                // if (error.code !== "ERR_CANCELED") {
-                //     navigate("/", { state: { form: location }, replace: true })
-                // }
+                if (error.code !== "ERR_CANCELED") {
+                    // navigate("/", { state: { form: location }, replace: true })
+                    setCurrentUserData({ data: null, loading: false, isUser: false, notUser: true })
+                }
                 console.log(error);
             }
         }
@@ -38,7 +36,6 @@ function CurrentUser() {
         getUser()
 
         return () => {
-            isMounted = false
             controller.abort()
         }
     }, [])

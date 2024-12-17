@@ -20,8 +20,7 @@ function Header() {
   const setSearchData = videoStore((state) => state.setSearchData)
   const setCurrentUserData = userData((state) => state.setCurrentUserData)
   const currentUserData = userData((state) => state.currentUserData)
-  const storageResponse = sessionStorage.getItem('isLogin')
-  const isLogin = JSON.parse(storageResponse)
+
 
   useEffect(() => {
     handleClickOutside()
@@ -76,11 +75,13 @@ function Header() {
     }
   }
 
-  function toggleLoginOut() {
-    if (isLogin) {
-      SignOut()
-      setCurrentUserData(null)
-      sessionStorage.removeItem('isLogin')
+  async function toggleLoginOut() {
+    if (currentUserData.isUser) {
+      console.log('signout chala')
+      const response = await SignOut()
+
+      console.log('response',response)
+      setCurrentUserData({ data: null, loading: false, isUser: false,notUser: true })
       navigate('/')
     } else {
       navigate('/login')
@@ -126,19 +127,19 @@ function Header() {
                 <img onClick={DashboardFunc} className='uploadVideoBtn' src="/uploadVideo.svg" alt="" />
               </button>
               <div>
-                {isLogin ? currentUserData ? <img className='w-[29px] h-[29px] object-cover rounded-full userDropdownBtn cursor-pointer' src={currentUserData?.avatar} alt="" />
-                  : <div className='w-[29px] h-[29px] rounded-full bg-slate-700'></div>
+                {currentUserData.isUser ? <img className='w-[29px] h-[29px] object-cover rounded-full userDropdownBtn cursor-pointer' src={currentUserData?.data?.avatar} alt="" />
+                  // : <div className='w-[29px] h-[29px] rounded-full bg-slate-700'></div>
                   : <img className='relative cursor-pointer userDropdownBtn' src="/avatar.svg" alt="" />
                 }
 
-                {isLogin?
+                {currentUserData.isUser ?
                   <div id="userDropdown" className={`z-10 ${dropDownCss} absolute right-7 bg-white divide-y divide-gray-100 rounded-lg shadow w-52 dark:bg-[#252934] dark:divide-gray-600 top-14`}>
                     <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                       <div className='flex items-center gap-2'>
-                        <img src={currentUserData?.avatar} className='w-9 h-9 rounded-full' alt="" />
+                        <img src={currentUserData?.data?.avatar} className='w-9 h-9 rounded-full' alt="" />
                         <div>
-                          <div>{currentUserData?.fullName}</div>
-                          <div className="font-medium truncate">{'@' + currentUserData?.username}</div>
+                          <div>{currentUserData?.data?.fullName}</div>
+                          <div className="font-medium truncate">{'@' + currentUserData?.data?.username}</div>
                         </div>
                       </div>
                     </div>
@@ -154,15 +155,15 @@ function Header() {
                       </li>
                     </ul>
                     <div className="py-1">
-                      <li onClick={toggleLoginOut} className="block px-4 py-2 SelectedLinks cursor-pointer text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">{isLogin ? 'Sign out' : 'Login'}</li>
+                      <li onClick={toggleLoginOut} className="block px-4 py-2 SelectedLinks cursor-pointer text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</li>
                     </div>
                   </div>
                   :
                   <div id="userDropdown" className={`z-10 ${dropDownCss} absolute right-7 bg-white divide-y divide-gray-100 rounded-lg shadow w-28 dark:bg-[#252934] dark:divide-gray-600 top-14`}>
-                  <div className="py-1">
-                    <li onClick={toggleLoginOut} className="block px-4 py-2 SelectedLinks cursor-pointer text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white text-base">Login</li>
+                    <div className="py-1">
+                      <li onClick={toggleLoginOut} className="block px-4 py-2 SelectedLinks cursor-pointer text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white text-base">Login</li>
+                    </div>
                   </div>
-                </div>
                 }
               </div>
             </div>
@@ -177,11 +178,11 @@ function Header() {
                 <img src="/leftArrow.svg" alt="" />
               </button>
               {/* <form onSubmit={searchVideo}> */}
-                <Input
-                  className="w-[80vw] md:block  rounded-full bg-[#13131497] h-11 px-5 text-[1.1rem] outline-none border-[#8d8d8d8b] border-[1px] text-white"
-                  placeholder="Search"
-                  onChange={(e) => setSearchValue(e.target.value)}
-                />
+              <Input
+                className="w-[80vw] md:block  rounded-full bg-[#13131497] h-11 px-5 text-[1.1rem] outline-none border-[#8d8d8d8b] border-[1px] text-white"
+                placeholder="Search"
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
               {/* </form> */}
             </div>
             <div>

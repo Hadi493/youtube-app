@@ -2,20 +2,21 @@ import { create } from "zustand";
 
 const userData = create((set) => (
     {
-        currentUserData: null,
-        isUser: false,
+        currentUserData: {
+            data: null,
+            loading: false,
+            isUser: false,
+            notUser: false,
+        },
 
-        setCurrentUserData: (data) => set(() => (
+        setCurrentUserData: (value) => set((state) => (
             {
-                currentUserData: data
+                currentUserData: {
+                    ...state.currentUserData,
+                    ...value
+                }
             }
         )),
-
-        setIsUser: ()=> set(()=>(
-            {
-                isUser: true
-            }
-        ))
     }
 ))
 

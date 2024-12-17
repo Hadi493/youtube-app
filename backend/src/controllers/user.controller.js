@@ -280,7 +280,9 @@ const logoutUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        sameSite: 'none',
+        domain: 'youtube-backend-latest.onrender.com'
     }
 
     return res

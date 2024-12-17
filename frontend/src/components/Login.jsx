@@ -14,8 +14,9 @@ function Login() {
 
   async function InputValues(data) {
     const responseData = await SignIn(data)
-    setCurrentUserData(responseData.data.data.user)
     if (responseData.status === 200) {
+      // setCurrentUserData(responseData.data.data.user)
+      setCurrentUserData({data: responseData.data.data.user, loading: false, isUser: Boolean(responseData.data.data.user),notUser: false})
       navigate("/")
     }
   }
@@ -24,8 +25,8 @@ function Login() {
     // // console.log(e.credential)
     const response = await SignInWithGoogle(e.credential)
     // console.log('response',response)
-    setCurrentUserData(response.data.data.user)
     if (response.status === 200) {
+      setCurrentUserData({data: response.data.data.user, loading: false, isUser: Boolean(response.data.data.user),notUser: false})
       navigate("/")
     }
   }

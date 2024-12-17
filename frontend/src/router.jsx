@@ -15,11 +15,12 @@ import Following from "./components/Following";
 import Dashboard from "./pages/Dashboard";
 import VideoDashboard from "./components/VideoDashboard";
 import UserDashboard from "./components/UserDashboard";
+import CurrentUser from "./api/authentication/CurrentUser";
+import { useEffect } from "react";
 // import { currentUser } from "./api/authentication/authApi";
 // import ShowLogin from "./subComponents/ShowLogin";
 
 const AppRouter = () => {
-
   // async function renderComponent() {
   //   // console.log('running');
   //   try {

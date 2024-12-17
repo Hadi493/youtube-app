@@ -6,12 +6,16 @@ import { currentUser } from '../api/authentication/authApi.js'
 
 function Desktop() {
   const [isCurrentUser, setIsCurrentUser] = useState(true)
+  const currentUserData = userData((state) => state.currentUserData);
   const navigate = useNavigate();
   const [authState, setAuthState] = useState({
     isLoading: true,
     data: null,
     error: null
   })
+
+  console.log('notUser',currentUserData.notUser)
+  console.log('loading',currentUserData.loading)
 
   useEffect(() => {
     async function getUser() {
@@ -66,10 +70,7 @@ function Desktop() {
     },
   ]
 
-  const storageVlaue = sessionStorage.getItem('isLogin')
-  const isUserFlag = JSON.parse(storageVlaue)
-
-  if (!isUserFlag) {
+  if (currentUserData.notUser) {
     return (
       <div className='h-full w-full flex items-center flex-col gap-2 justify-center text-white mt-72'>
         <div>Please log in</div>
@@ -86,12 +87,12 @@ function Desktop() {
         </div>
       </div>
 
-      {authState.data ?
+      {currentUserData.isUser ?
         <div>
           <div className='lg:ml-[6rem]'>
 
             <div className='coverImage relative'>
-              <img className='w-full h-[18rem] object-cover' src={authState.data?.coverImage} alt="" />
+              <img className='w-full h-[18rem] object-cover' src={authState.data?.coverImage ? authState.data?.coverImage : '/images/coverImage.jpg'} alt="" />
             </div>
 
             <div className='px-4'>

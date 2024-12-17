@@ -10,15 +10,15 @@ async function SignIn({ email, password }) {
             { withCredentials: true }
         )
 
-        if (response) {
-            const now = new Date();
-            const oneMonth = 30 * 24 * 60 * 60 * 1000;
-            const item = {
-                value: true,
-                expiry: now.getTime() + oneMonth,
-            };
-            sessionStorage.setItem('isLogin', JSON.stringify(item))
-        }
+        // if (response) {
+        //     const now = new Date();
+        //     const oneMonth = 30 * 24 * 60 * 60 * 1000;
+        //     const item = {
+        //         value: true,
+        //         expiry: now.getTime() + oneMonth,
+        //     };
+        //     sessionStorage.setItem('isLogin', JSON.stringify(item))
+        // }
 
         return response
     } catch (error) {
@@ -38,15 +38,15 @@ async function SignInWithGoogle(token) {
             withCredentials: true
         })
 
-        if (response) {
-            const now = new Date();
-            const oneMonth = 30 * 24 * 60 * 60 * 1000;
-            const item = {
-                value: true,
-                expiry: now.getTime() + oneMonth,
-            };
-            sessionStorage.setItem('isLogin', JSON.stringify(item))
-        }
+        // if (response) {
+        //     const now = new Date();
+        //     const oneMonth = 30 * 24 * 60 * 60 * 1000;
+        //     const item = {
+        //         value: true,
+        //         expiry: now.getTime() + oneMonth,
+        //     };
+        //     sessionStorage.setItem('isLogin', JSON.stringify(item))
+        // }
 
         return response
     } catch (error) {
@@ -57,9 +57,6 @@ async function SignInWithGoogle(token) {
 async function SignOut() {
     try {
         const response = await baseUrl.post("/users/logout", {}, { withCredentials: true })
-        if (response) {
-            sessionStorage.removeItem('isLogin')
-        }
         return response
     } catch (error) {
         console.log(error);
