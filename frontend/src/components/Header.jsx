@@ -77,10 +77,10 @@ function Header() {
 
   async function toggleLoginOut() {
     if (currentUserData.isUser) {
-      console.log('signout chala')
+      // console.log('signout chala')
       const response = await SignOut()
 
-      console.log('response',response)
+      // console.log('response',response)
       setCurrentUserData({ data: null, loading: false, isUser: false,notUser: true })
       navigate('/')
     } else {

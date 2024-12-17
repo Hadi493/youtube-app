@@ -14,8 +14,8 @@ function Desktop() {
     error: null
   })
 
-  console.log('notUser',currentUserData.notUser)
-  console.log('loading',currentUserData.loading)
+  // console.log('notUser',currentUserData.notUser)
+  // console.log('loading',currentUserData.loading)
 
   useEffect(() => {
     async function getUser() {

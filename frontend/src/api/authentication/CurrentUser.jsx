@@ -19,7 +19,7 @@ function CurrentUser() {
                     signal: controller.signal
                 })
 
-                console.log('response', response)
+                // console.log('response', response)
                 setCurrentUserData({ data: response.data.data, loading: false, isUser: Boolean(response.data.data) })
 
                 return response.data

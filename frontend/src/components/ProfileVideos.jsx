@@ -22,7 +22,7 @@ function ProfileVideos() {
   useEffect(() => {
     async function processFetch() {
       const response = await getAllVideosOfaUser(currentUserData?._id)
-      console.log('response', response)
+      // console.log('response', response)
       setHasVideo(true)
       setVideos(response?.data?.data?.videos)
     }
@@ -33,7 +33,7 @@ function ProfileVideos() {
     navigate("/dashboard")
   }
 
-  console.log(videos)
+  // console.log(videos)
 
   if (videos?.length == 0) {
     return videos?.length === 0 && (<div className='flex h-[15rem] justify-center flex-col text-white items-center'>
