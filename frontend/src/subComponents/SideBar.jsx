@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import userData from '../zustand/userData';
 
 function SideBar() {
     const navigate = useNavigate();
     const location = useLocation();
+    const currentUserData = userData((state) => state.currentUserData);
+    // console.log(currentUserData.data._id)
 
     const handleDesktopNavigation = () => {
         if (location.pathname !== '/desktop/videos') {
@@ -25,8 +28,8 @@ function SideBar() {
         {
             "name": "You",
             "src": "/currentUser.svg",
-            "link": "/desktop/videos",
-            "onClick": handleDesktopNavigation
+            "link": `/desktop/${currentUserData?.data?._id}`,
+            // "onClick": handleDesktopNavigation
         },
         {
             "name": "Downloads",
