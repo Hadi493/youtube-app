@@ -15,13 +15,11 @@ import Following from "./components/Following";
 import Dashboard from "./pages/Dashboard";
 import VideoDashboard from "./components/VideoDashboard";
 import UserDashboard from "./components/UserDashboard";
-import CurrentUser from "./api/authentication/CurrentUser";
-import { useEffect } from "react";
-// import { currentUser } from "./api/authentication/authApi";
 // import ShowLogin from "./subComponents/ShowLogin";
 
 const AppRouter = () => {
   // async function renderComponent() {
+
   //   // console.log('running');
   //   try {
   //     const response = await currentUser()
@@ -42,7 +40,7 @@ const AppRouter = () => {
         <Route path='userSection' element={<UserSection />} />
         <Route path='searchResult' element={<SearchResult />} />
 
-        <Route path='desktop' element={<Desktop />} >
+        <Route path='desktop/:userId' element={<Desktop />} >
           <Route index element={<Navigate to="videos" replace />} />
           <Route path="videos" element={<ProfileVideos />} />
           <Route path="playlist" element={<Playlists />} />

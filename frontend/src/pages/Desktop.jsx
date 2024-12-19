@@ -1,30 +1,36 @@
 import SideBar from '../subComponents/SideBar'
-import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import userData from '../zustand/userData.js'
-import { currentUser } from '../api/authentication/authApi.js'
+import { userById } from '../api/authentication/authApi.js'
 
 function Desktop() {
-  const [isCurrentUser, setIsCurrentUser] = useState(true)
+  // const [isCurrentUser, setIsCurrentUser] = useState(true)
   const currentUserData = userData((state) => state.currentUserData);
   const navigate = useNavigate();
+  const { userId } = useParams()
+  // console.log(userId)
   const [authState, setAuthState] = useState({
     isLoading: true,
     data: null,
     error: null
   })
 
-  // console.log('notUser',currentUserData.notUser)
-  // console.log('loading',currentUserData.loading)
+  // console.log("currentUserData",currentUserData?.data?._id)
+  // console.log("authState",authState?.data?._id)
+
+  // console.log('notUser', currentUserData.notUser)
+  // console.log('loading', currentUserData.loading)
 
   useEffect(() => {
     async function getUser() {
       try {
-        const response = await currentUser()
+        const response = await userById(userId)
+        console.log('response', response.data.data.userData)
         if (response?.data?.data) {
           setAuthState({
             isLoading: false,
-            data: response.data.data,
+            data: response.data.data.userData,
             error: null
           })
         } else {
@@ -44,7 +50,7 @@ function Desktop() {
       }
     }
     getUser()
-  }, [])
+  }, [userId])
 
   const deskCategories = [
     {
@@ -79,20 +85,24 @@ function Desktop() {
     );
   }
 
-  return currentUserData.isUser?(
-    <div className=''>
+  return currentUserData.isUser ? (
+    <div className='mt-20'>
       <div>
         <div className='sm:left-[8px] sm:top-20 fixed sm:hidden z-40 sm:z-0 lg:block bottom-[0px] lg:bottom-auto w-full lg:w-[5rem]'>
           <SideBar />
         </div>
       </div>
 
-      {currentUserData.loading == false ?
+      {authState.isLoading == false ?
         <div>
           <div className='lg:ml-[6rem]'>
 
-            <div className='coverImage relative'>
-              <img className='w-full h-[18rem] object-cover' src={authState.data?.coverImage ? authState.data?.coverImage : '/images/coverImage.jpg'} alt="" />
+            <div className='w-[97%] m-auto max-h-[14rem] rounded-xl overflow-hidden'>
+              <img
+                className='w-full h-full object-contain object-center'
+                src={authState.data?.coverImage || '/images/coverImage.jpg'}
+                alt="Cover"
+              />
             </div>
 
             <div className='px-4'>
@@ -102,7 +112,7 @@ function Desktop() {
                     <img src={authState.data?.avatar} className='w-20 h-20 rounded-full object-cover' alt="" />
                   </div>
 
-                  <div className='text-white flex flex-col gap-1 top-[-3rem] relative sm:static pl-2 sm:pl-0'>
+                  <div className='text-white flex flex-col gap-1 top-[-3rem] sm:static pl-2 sm:pl-0'>
                     <div className='flex justify-between items-center'>
                       <p className='text-2xl font-bold'>{authState.data?.username}</p>
 
@@ -127,7 +137,7 @@ function Desktop() {
 
 
                 <div>
-                  <button type="button" className="text-[#c6c1c1] bg-[#661fbd] font-medium rounded-lg text-sm px-5 py-2.5 me-2 focus:outline-none top-[-3rem] relative sm:static pl-2">{isCurrentUser ? <div onClick={() => navigate("/dashboard/userDashboard")} className='flex items-center gap-2'><img src="/edit.svg" /> <p>Edit</p></div> : 'Subscribe'}</button>
+                  <button type="button" className="text-[#c6c1c1] bg-[#661fbd] font-medium rounded-lg text-sm px-5 py-2.5 me-2 focus:outline-none top-[-3rem] sm:static pl-2">{currentUserData?.data?._id == authState?.data?._id ? <div onClick={() => navigate("/dashboard/userDashboard")} className='flex items-center gap-2'><img src="/edit.svg" /> <p>Edit</p></div> : 'Subscribe'}</button>
                 </div>
               </div>
             </div>
@@ -211,7 +221,7 @@ function Desktop() {
         </div>
       }
     </div>
-  ): <div className='text-white'>loading...</div>
+  ) : <div className='text-white'>loading...</div>
 }
 
 export default Desktop

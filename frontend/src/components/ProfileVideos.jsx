@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import useHandleCssStore from '../zustand/useHandleCssStore'
 import userData from '../zustand/userData'
 import { getAllVideosOfaUser } from '../api/videos/videoApi'
@@ -9,7 +9,8 @@ import { currentUser } from '../api/authentication/authApi'
 function ProfileVideos() {
   const [hasVideo, setHasVideo] = useState(false)
   const [videos, setVideos] = useState([])
-  const currentUserData = userData((state) => state.currentUserData)
+  // const currentUserData = userData((state) => state.currentUserData)
+  const {userId} = useParams()
 
   const navigate = useNavigate()
   const videoClick = (e) => {
@@ -21,13 +22,13 @@ function ProfileVideos() {
 
   useEffect(() => {
     async function processFetch() {
-      const response = await getAllVideosOfaUser(currentUserData?._id)
-      // console.log('response', response)
+      const response = await getAllVideosOfaUser(userId)
+      console.log('response', response)
       setHasVideo(true)
       setVideos(response?.data?.data?.videos)
     }
     processFetch()
-  }, [currentUserData])
+  }, [userId])
 
   function navigateAndToggle() {
     navigate("/dashboard")
@@ -80,7 +81,7 @@ function ProfileVideos() {
                         <div>
                         </div>
                       </div>
-                      <p className="leading-none text-[#a1a1a1]">{value?.description.length > 90 ? value.description.substring(0, 90) + "..." : value.description}</p>
+                      {/* <p className="leading-none text-[#a1a1a1]">{value?.description.length > 90 ? value.description.substring(0, 90) + "..." : value.description}</p> */}
                       <div className='flex gap-1 text-[#a1a1a1]'>
                         <p>173K views.</p>
                         <p>{formatTimeDifference(value?.createdAt)}</p>

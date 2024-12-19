@@ -41,7 +41,8 @@ function Home() {
       navigate(`video/${value?._id}`)
     }
     if (target == "profile") {
-      navigate("userSection")
+      console.log(value?.owner)
+      navigate(`desktop/${value?.owner}`)
     }
   }
 
@@ -89,9 +90,7 @@ function Home() {
                     </div>
                     <div className="py-4">
                       <div className="flex gap-0">
-                        <img onClick={() => {
-                          // console.log("Hola");
-                        }} id='profile' className="w-10 h-10 object-cover rounded-full mr-4" src={value?.userData?.avatar} alt="Avatar of Jonathan Reinink" />
+                        <img id='profile' className="w-10 h-10 object-cover rounded-full mr-4" src={value?.userData?.avatar} alt="Avatar of Jonathan Reinink" />
                         <div className="text-base flex flex-col gap-1 text-[#dfdede]">
                           <div className='flex gap-2'>
                             <div className="text-base font-medium">{value?.title}</div>
