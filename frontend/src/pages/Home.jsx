@@ -18,9 +18,7 @@ function Home() {
   useEffect(() => {
     async function getAllVideosFunc() {
       const response = await getAllVideos()
-      // setHasVideo(false)
       if (response) {
-        // console.log(response)
         const videoData = response?.data.data.allvideos
 
         const awaitResponse = videoData.map((val) => userById(val?.owner))
