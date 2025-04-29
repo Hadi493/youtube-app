@@ -203,27 +203,32 @@ const getLikedVideos = asyncHandler(async (req, res) => {
         {
             $unwind: "$videos"
         },
-        {
-            $project: {
-                _id: 1,
-                "videos._id": 1,
-                "videos.thumbnail": 1,
-                "videos.title": 1,
-                "videos.duration": 1,
-                "videos.views": 1,
-                "videos.createdAt": 1,
-            }
-        }
+        // {
+        //     $project: {
+        //         _id: 1,
+        //         "videos._id": 1,
+        //         "videos.thumbnail": 1,
+        //         "videos.title": 1,
+        //         "videos.duration": 1,
+        //         "videos.views": 1,
+        //         "videos.createdAt": 1,
+        //     }
+        // }
     ])
 
-    // console.log(getAllLikedVideos);
+    if (!getAllLikedVideos) {
+        throw new ApiError(401,'got some error while fetching videos')
+    }
 
+    console.log(getAllLikedVideos);
+
+    res.status(200).json(new ApiResponse(200,getAllLikedVideos,'liked videos of user fetched successfully'))
 
 })
 
 const getLikesOfaVideo = asyncHandler(async (req, res) => {
     const { videoId } = req.params
-    const userId = req.query.userId
+    const { userId } = req.query
     const likeCount = await Like.countDocuments({ video: videoId })
 
     // if (!likeCount) {
@@ -238,6 +243,7 @@ const getLikesOfaVideo = asyncHandler(async (req, res) => {
                 {
                     likeCount: likeCount ? likeCount : 0,
                     isUserLiked: userId && isUserLiked ? true : false,
+                    // likedBy: isUserLiked
                 }
                 , "Like of this video")
             )

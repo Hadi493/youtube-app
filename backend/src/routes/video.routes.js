@@ -34,7 +34,7 @@ router
         publishAVideo
     );
 
-router.route("/getAllVideosOfaUser").get(verifyJWT, getAllVideosOfaUser)
+router.route("/getAllVideosOfaUser").get(getAllVideosOfaUser)
 router.route("/toggle/publish/:videoId").patch(verifyJWT, togglePublishStatus);
 
 router.route("/searchVideos").get(getSearchedVideos)

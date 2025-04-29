@@ -6,10 +6,14 @@ import Wrapper from '../components/Wrapper'
 import { getAllVideos } from '../api/videos/videoApi'
 import { userById } from '../api/authentication/authApi'
 import formatTimeDifference from '../hooks/formateTime'
+import { Playlists, Video, AddToPlaylist } from '../components'
+
 
 function Home() {
   const [hasVideo, setHasVideo] = useState(true)
   const [videoArray, setVideoArray] = useState([])
+  const [showPlaylist, setShowPlaylist] = useState(false)
+  const [videoId, setVideoId] = useState('')
 
   useEffect(() => {
     async function getAllVideosFunc() {
@@ -41,7 +45,7 @@ function Home() {
       navigate(`video/${value?._id}`)
     }
     if (target == "profile") {
-      console.log(value?.owner)
+      // console.log(value?.owner)
       navigate(`desktop/${value?.owner}`)
     }
   }
@@ -74,13 +78,12 @@ function Home() {
   return hasVideo ? (
     <Wrapper>
       <div className='flex'>
-
         <div className='left fixed sm:hidden md:p-2 p-0 lg:block bottom-0 lg:bottom-auto w-full lg:w-[4rem]'>
           <SideBar />
         </div>
 
         <div className='right w-full pt-3 overflow-hidden p-2 sm:mx-3 pb-16 sm:pb-0'>
-          <div className='lg:ml-[4.5rem] ml-0 items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4'>
+          <div className='lg:ml-[4.5rem] ml-0 items-center grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-3'>
             {
               videoArray.length > 0 ? videoArray.map((value) => {
                 return <div key={value._id} className='cursor-pointer'>
@@ -89,18 +92,24 @@ function Home() {
                       <img loading='lazy' className="w-full object-contain aspect-video rounded-xl bg-black" src={value?.thumbnail} alt="Sunset in the mountains" />
                     </div>
                     <div className="py-4">
-                      <div className="flex gap-0">
-                        <img id='profile' className="w-10 h-10 object-cover rounded-full mr-4" src={value?.userData?.avatar} alt="Avatar of Jonathan Reinink" />
-                        <div className="text-base flex flex-col gap-1 text-[#dfdede]">
-                          <div className='flex gap-2'>
-                            <div className="text-base font-medium">{value?.title}</div>
-                          </div>
-                          <p className="leading-none text-sm text-[#a1a1a1]">{value?.userData?.username}</p>
-                          <div className='flex gap-1 text-[#a1a1a1]'>
-                            <p>{value?.views} views.</p>
-                            <p>{formatTimeDifference(value?.createdAt)}</p>
+
+                      <div className="flex justify-between items-start">
+                        <div className='flex'>
+                          <img id='profile' className="w-10 h-10 object-cover rounded-full mr-4" src={value?.userData?.avatar} alt="Avatar of Jonathan Reinink" />
+                          <div className="text-base flex flex-col gap-1 text-[#dfdede]">
+                            <div className='flex gap-2'>
+                              <div className="text-base font-medium">{value?.title}</div>
+                            </div>
+                            <p className="leading-none text-sm text-[#a1a1a1]">{value?.userData?.username}</p>
+                            <div className='flex gap-1 text-[#a1a1a1]'>
+                              <p>{value?.views} views.</p>
+                              <p>{formatTimeDifference(value?.createdAt)}</p>
+                            </div>
                           </div>
                         </div>
+
+
+                        <img id='dot' onClick={()=> { setShowPlaylist(true), setVideoId(value._id) }} className='text-sm p-1.5 hover:bg-[#b0afaf8d] rounded-full' src="dots.svg" alt="" />
                       </div>
                     </div>
                   </div>
@@ -110,6 +119,10 @@ function Home() {
           </div>
         </div>
       </div>
+
+      {showPlaylist && <div>
+        <AddToPlaylist playlistState={{showPlaylist,setShowPlaylist}} videoId={videoId}/>
+      </div>}
 
       {/* <div className='w-[373px] aspect-video rounded-xl bg-black'></div> */}
     </Wrapper >

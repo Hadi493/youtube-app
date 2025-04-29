@@ -9,7 +9,7 @@
 @layer base {
   body {
     /* @apply bg-gradient-to-b from-[#0a0a0a] to-[#0e0912] min-h-screen; */
-    @apply bg-[#18181b];
+    @apply bg-[#0f0f0f];
     @apply text-white
   }
 }

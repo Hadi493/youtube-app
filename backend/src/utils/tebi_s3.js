@@ -37,6 +37,7 @@ async function uploadImagesToBucket(image, isUser = false) {
         if (storeImageTos3.$metadata.httpStatusCode === 200) {
             const encodedImageName = encodeURIComponent(imageName)
             const url = `https://${process.env.TEBI_TEMPORARY_BUCKET_NAME}.s3.tebi.io/${encodedImageName}`
+            console.log(url)
             return url
         }
 

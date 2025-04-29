@@ -6,21 +6,20 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 
 
 const createPlaylist = asyncHandler(async (req, res) => {
-    const { name, description } = req.body
+    const { name } = req.body
     const user = req.user
 
     //TODO: create playlist    
 
-    if (!(name && description)) {
+    if (!(name)) {
         throw new ApiError(
             400,
-            "Name and description is required"
+            "Name a is required"
         )
     }
 
     const createPlaylist = await Playlist.create({
         name,
-        description,
         owner: user._id
     })
 
@@ -200,7 +199,7 @@ const deletePlaylist = asyncHandler(async (req, res) => {
 
 const updatePlaylist = asyncHandler(async (req, res) => {
     const { playlistId } = req.params
-    const { name, description } = req.body
+    const { nam } = req.body
     //TODO: update playlist
 
     if (!playlistId) {
@@ -210,16 +209,15 @@ const updatePlaylist = asyncHandler(async (req, res) => {
         )
     }
 
-    if (!(name && description)) {
+    if (!(name )) {
         throw new ApiError(
             400,
-            "Name and description are required"
+            "Name a are required"
         )
     }
 
     const updatePlaylist = await Playlist.findByIdAndUpdate(playlistId, {
         name: name,
-        description: description
     }, { new: true })
 
     if (!updatePlaylist) {

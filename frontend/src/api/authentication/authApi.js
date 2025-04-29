@@ -10,19 +10,9 @@ async function SignIn({ email, password }) {
             { withCredentials: true }
         )
 
-        // if (response) {
-        //     const now = new Date();
-        //     const oneMonth = 30 * 24 * 60 * 60 * 1000;
-        //     const item = {
-        //         value: true,
-        //         expiry: now.getTime() + oneMonth,
-        //     };
-        //     sessionStorage.setItem('isLogin', JSON.stringify(item))
-        // }
-
         return response
     } catch (error) {
-        // console.log(error?.response?.data);
+        console.log(error?.response?.data);
         return null
     }
 }
@@ -65,7 +55,7 @@ async function SignOut() {
 }
 
 async function SignUp({ username, fullname, email, password, avatar, coverImage }) {
-    // // console.log(username, fullname, email, password, avatar[0], coverImage[0]);
+    // console.log(avatar[0], coverImage[0]);
     const formData = new FormData();
 
     const defaultAvatar = new File(
@@ -192,4 +182,27 @@ async function changeCurrentPassword({ oldPassword, newPassword }) {
     }
 }
 
-export { SignIn, SignOut, SignUp, userById, currentUser, UpdateNameEmail, UpdateAvatar, UpdateCoverImage, changeCurrentPassword, SignInWithGoogle }
+async function addVideosToWatchHistory(videoId){
+    console.log(videoId)
+    try {
+        const result = await baseUrl.patch("/users/addVideosToWatchHistory",{
+            videoId: videoId
+        },{withCredentials: true})
+        console.log("addVideosToWatchHistory",result)
+        return result
+    } catch (error) {
+        console.log(error)
+        throw new Error(error)
+    }
+}
+
+async function watchHistory(){
+    try {
+        const result = await baseUrl.get("/users/watchHistory",{withCredentials: true})
+        return result
+    } catch (error) {
+        throw new Error(error)
+    }
+}
+
+export { SignIn, SignOut, SignUp, userById, currentUser, UpdateNameEmail, UpdateAvatar, UpdateCoverImage, changeCurrentPassword, SignInWithGoogle, addVideosToWatchHistory, watchHistory }

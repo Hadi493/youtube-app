@@ -12,11 +12,6 @@ const userSchema = new Schema(
             trim: true,
             index: true
         },
-        role:{
-            type: String,
-            reqired: true,
-            lowercase: true,
-        },
         email: {
             type: String,
             required: true,
@@ -64,16 +59,6 @@ const userSchema = new Schema(
         timestamps: true
     }
 )
-
-// userSchema.index(
-//     {
-//         username: 1
-//     },
-//     {
-//         unique: true,
-//         partialFilterExpression: { authProvider: 'local' }
-//     }
-// )
 
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password") || this.authProvider === 'google') return next();

@@ -9,8 +9,8 @@ function Dashboard() {
   const navigate = useNavigate()
 
   // console.log('currentUserData', currentUserData.data)
-  // console.log('loading', currentUserData.loading)
-  // console.log('isUser', currentUserData.isUser)
+  console.log('loading', currentUserData.loading)
+  console.log('isUser', currentUserData.isUser)
 
 
   if (currentUserData.notUser) {

@@ -49,9 +49,22 @@ async function getCommentLikes(commentId, userId) {
     }
 }
 
+async function getLikedVideosOfUser(){
+    try {
+        const res = await baseUrl.get('/likes/video',{
+            withCredentials: true
+        })
+
+        return res
+    } catch (error) {
+        throw error
+    }
+}
+
 export {
     toggleVideoLike,
     getVideoLikes,
     toggleCommentLike,
-    getCommentLikes
+    getCommentLikes,
+    getLikedVideosOfUser
 }

@@ -28,7 +28,7 @@ function SideBar() {
         {
             "name": "You",
             "src": "/currentUser.svg",
-            "link": `/desktop/${currentUserData?.data?._id}`,
+            "link": `/userSection`,
             // "onClick": handleDesktopNavigation
         },
         {
@@ -49,7 +49,7 @@ function SideBar() {
                             title={value.name} 
                             className='flex items-center flex-col hover:opacity-75 focus:opacity-100'
                         >
-                            <img src={value.src} alt={value.name} />
+                            <img className="w-[1.6rem]" src={value.src} alt={value.name} />
                             <p className='text-[0.60rem]'>{value.name}</p>
                         </button>
                     ) : (
@@ -59,7 +59,7 @@ function SideBar() {
                                 title={value.name} 
                                 className='flex items-center flex-col hover:opacity-75 focus:opacity-100'
                             >
-                                <img src={value.src} alt={value.name} />
+                                <img className="w-[1.6rem]" src={value.src} alt={value.name} />
                                 <p className='text-[0.60rem]'>{value.name}</p>
                             </button>
                         </Link>

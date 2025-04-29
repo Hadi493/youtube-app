@@ -14,7 +14,7 @@ function Login() {
 
   async function InputValues(data) {
     const responseData = await SignIn(data)
-    if (responseData.status === 200) {
+    if (responseData?.status === 200) {
       // setCurrentUserData(responseData.data.data.user)
       setCurrentUserData({data: responseData.data.data.user, loading: false, isUser: Boolean(responseData.data.data.user),notUser: false})
       navigate("/")

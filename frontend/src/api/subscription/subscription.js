@@ -1,3 +1,4 @@
+import axios from "axios";
 import baseUrl from "../baseUrl/BaseUrl";
 
 async function toggleSubscription(channelId) {
@@ -35,8 +36,21 @@ async function getSubscribersOfchannel(channelId) {
     }
 }
 
+async function getSubscribedChannelOfUser(userId) {
+    console.log(userId)
+    try {
+        const response = await axios.get(`/subscriptions/u/:${userId}`)
+        return response
+    } catch (error) {
+        console.log(error)
+        throw new Error("got error while getting channels")
+    }
+}
+
+
 export {
     toggleSubscription,
     isChannelSubscribed,
-    getSubscribersOfchannel
+    getSubscribersOfchannel,
+    getSubscribedChannelOfUser
 }

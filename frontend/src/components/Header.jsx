@@ -77,10 +77,10 @@ function Header() {
 
   async function toggleLoginOut() {
     if (currentUserData.isUser) {
-      // console.log('signout chala')
+      console.log('signout chala')
       const response = await SignOut()
 
-      // console.log('response',response)
+      console.log('response',response)
       setCurrentUserData({ data: null, loading: false, isUser: false,notUser: true })
       navigate('/')
     } else {
@@ -92,39 +92,44 @@ function Header() {
     <>
       <div className=''>
         <div className={`${headerClass} md:block`}>
-          <div onScroll={() => setHeaderBg('fffff')} className={`flex max-w-[2560px] text-white items-center justify-between px-7 pt-2 pb-5 text-[1.11rem] bg-[#18181b]`}>
+          <div onScroll={() => setHeaderBg('fffff')} className={`flex max-w-[2560px] text-white items-center justify-between px-7 pt-2 pb-5 text-[1.11rem] bg-[#0f0f0f]`}>
             <div className='flex items-center gap-7'>
               <button className='hidden sm:block' id='mainMenu' onClick={toggleSideBar}>
                 <img src="/menubar.svg" alt="" />
               </button>
               <Link to={""} className='flex items-center gap-1'>
-                <img className='w-[2.3rem]' src="/youtube-video.svg" alt="" srcSet="" />
-                <span>Watch-here</span>
+                <img className='w-[2rem]' src="/youtube-video.svg" alt="" srcSet="" />
+                <span className=''>Watch-here</span>
               </Link>
             </div>
 
-            <div className=''>
+            <div className='flex items-center gap-5 justify-center'>
               <form onSubmit={searchVideo} className='flex relative'>
                 <Input
-                  className="max-w-[50rem] lg:w-[35rem] md:w-[15rem] hidden md:block rounded-r-none rounded-full bg-[#121214] text-white h-10 px-5 text-[1.1rem] outline-none border-[#8d8d8d8b] border-[1px] focus:border-[#352692] placeholder:text-[#8d8d8d8b] transition-all duration-300"
+                  className="max-w-[50rem] lg:w-[34rem] md:w-[14rem] hidden md:block rounded-r-none rounded-full bg-[#121214] text-white h-10 px-5 text-[1.1rem] outline-none border-[#373636] border-[1px] focus:border-[#352692] placeholder:text-[#8d8d8d8b] transition-all duration-300"
                   placeholder="Search"
                   onChange={(e) => setSearchValue(e.target.value)}
                 />
 
-                <div onClick={searchVideo} className='bg-[#363e4a] items-center px-4 rounded-l-none rounded-full outline-none border-[#8d8d8d8b] border-[1px] hidden md:flex cursor-pointer'>
+                <div onClick={searchVideo} className='bg-[#272727] items-center px-4 rounded-l-none rounded-full outline-none border-[#373636] border-[1px] hidden md:flex cursor-pointer'>
                   <button className=''>
                     <img className='' src="/search.svg" alt="" />
                   </button>
                 </div>
               </form>
+
+              <div className='bg-[#272727] p-2.5 rounded-full md:block hidden'>
+                <img src="/mic.svg" alt="" />
+              </div>
             </div>
 
-            <div className='flex gap-3 sm:gap-5'>
+            <div className='flex gap-3 items-center sm:gap-5'>
               <button onClick={toggleSearch} className='md:hidden'>
                 <img src="/search.svg" alt="" />
               </button>
-              <button>
-                <img onClick={DashboardFunc} className='uploadVideoBtn' src="/uploadVideo.svg" alt="" />
+              <button onClick={DashboardFunc} className='flex items-center gap-2 uploadVideoBtn bg-[#272727] md:pl-2 md:pr-4 pl-1.5 pr-1.5 py-1 rounded-full'>
+                <img className='' src="/plus1.svg" alt="" />
+                <p className='text-[0.9rem] font-semibold md:block hidden'>Create</p>
               </button>
               <div>
                 {currentUserData.isUser ? <img className='w-[29px] h-[29px] object-cover rounded-full userDropdownBtn cursor-pointer' src={currentUserData?.data?.avatar} alt="" />
@@ -172,25 +177,32 @@ function Header() {
 
 
         <div className={`${mobileSearch} md:hidden`}>
-          <div className='flex relative pt-3 pb-[0.8rem] bg-[#13151a] justify-center'>
-            <div className='flex gap-6'>
-              <button onClick={backToHeader}>
-                <img src="/leftArrow.svg" alt="" />
-              </button>
-              {/* <form onSubmit={searchVideo}> */}
-              <Input
-                className="w-[80vw] md:block  rounded-full bg-[#13131497] h-11 px-5 text-[1.1rem] outline-none border-[#8d8d8d8b] border-[1px] text-white"
-                placeholder="Search"
-                onChange={(e) => setSearchValue(e.target.value)}
-              />
-              {/* </form> */}
+          <div className='flex relative gap-3 pt-3 items-center pb-[0.8rem] bg-[#13151a] justify-center'>
+            <div className='flex relative pt-3 pb-[0.8rem] bg-[#13151a] justify-center'>
+              <div className='flex gap-6'>
+                <button onClick={backToHeader}>
+                  <img src="/leftArrow.svg" alt="" />
+                </button>
+                {/* <form onSubmit={searchVideo}> */}
+                <Input
+                  className="w-[70vw] md:block  rounded-full bg-[#13131497] h-11 px-5 text-[1.1rem] outline-none border-[#8d8d8d8b] border-[1px] text-white"
+                  placeholder="Search"
+                  onChange={(e) => setSearchValue(e.target.value)}
+                />
+                {/* </form> */}
+              </div>
+              <div>
+                <button className={`${mobileSearch !== 'hidden' ? 'absolute text-center ml-[-3rem] mt-[0.60rem]' : "hidden text-center ml-[-3rem] mt-[0.60rem]"}`} onClick={searchVideo}>
+                  <img className='' src="/search.svg" alt="" />
+                </button>
+              </div>
             </div>
-            <div>
-              <button className={`${mobileSearch !== 'hidden' ? 'absolute text-center ml-[-3rem] mt-[0.60rem]' : "hidden text-center ml-[-3rem] mt-[0.60rem]"}`} onClick={searchVideo}>
-                <img className='' src="/search.svg" alt="" />
-              </button>
+
+            <div className='bg-[#272727] p-2.5 rounded-full md:hidden'>
+                  <img src="mic.svg" alt="" />
             </div>
           </div>
+
         </div>
 
         <div className={`${coverAll}`}>

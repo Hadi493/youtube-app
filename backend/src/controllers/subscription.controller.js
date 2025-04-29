@@ -117,12 +117,16 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
     // ])
 
     const Subscribers = await Subscription.countDocuments({ channel: channelId })
+    // console.log('Subscribers',Subscribers)
 
-    if (!Subscribers) {
+    if (Subscribers == null) {
         throw new ApiError(404,
             "Subscribers not found"
         )
     }
+
+
+    // const SubscribersCount = Subscribers ? Subscribers : 0
 
     return res
         .status(200)
@@ -144,6 +148,7 @@ const getUserChannelSubscribers = asyncHandler(async (req, res) => {
 
 const getSubscribedChannels = asyncHandler(async (req, res) => {
     const { subscriberId } = req.params
+    console.log("hello", subscriberId)
     //get the subscriberId from req
     //find the channel that user has subscribed
     // // console.log(subscriberId);

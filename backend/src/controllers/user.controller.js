@@ -53,16 +53,17 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User with email or username already exists")
     }
 
+    // console.log("avatar",req.files?.avatar)
     const avatarLocalPath = req.files?.avatar[0]?.path;
     // console.log('avatarLocalPath', avatarLocalPath);
 
 
     const coverImgLocalPath = req.files?.coverImage[0]?.path;
 
-    let coverImageLocalPath;
-    if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
-        coverImageLocalPath = req.files.coverImage[0].path
-    }
+    // let coverImageLocalPath;
+    // if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
+    //     coverImageLocalPath = req.files.coverImage[0].path
+    // }
 
     if (!avatarLocalPath) {
         throw new ApiError(400, "Avatar file is required")
@@ -72,7 +73,7 @@ const registerUser = asyncHandler(async (req, res) => {
     const coverImage = await uploadImagesToBucket(coverImgLocalPath, { isUser: true })
 
     if (!avatar) {
-        throw new ApiError(400, "Avatar file is required")
+        throw new ApiError(400, "Got error while Uploading avatar to storage")
     }
 
 
@@ -83,7 +84,7 @@ const registerUser = asyncHandler(async (req, res) => {
         email,
         password,
         username: username.toLowerCase(),
-        role: 'user'
+        authProvider: "local"
     })
 
     const createdUser = await User.findById(user._id).select(
@@ -135,9 +136,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        domain: 'youtube-backend-latest.onrender.com'
+        secure: true
     }
 
     return res
@@ -190,9 +189,7 @@ const loginUsingGoogle = asyncHandler(async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            domain: 'youtube-backend-latest.onrender.com'
+            secure: true
         }
 
         return res.status(200)
@@ -280,9 +277,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 
     const options = {
         httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-        domain: 'youtube-backend-latest.onrender.com'
+        secure: true
     }
 
     return res
@@ -313,9 +308,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
         const options = {
             httpOnly: true,
-            secure: true,
-            sameSite: 'none',
-            domain: 'youtube-backend-latest.onrender.com'
+            secure: true
         }
 
         const { accessToken, refreshToken } = await generateAccessAndRefereshTokens(user._id)
@@ -356,6 +349,7 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
 })
 
 const getCurrentUser = asyncHandler(async (req, res) => {
+    // const User = req.user ? true : false
     return res
         .status(200)
         .json(new ApiResponse(
@@ -560,6 +554,32 @@ const getUserById = asyncHandler(async (req, res) => {
     }
 })
 
+const addVideosToWatchHistory = asyncHandler(async (req, res) => {
+    const userId = req.user._id
+    const { videoId } = req.body
+    if (!userId) {
+        throw new ApiError(401, "unAuthorized request")
+    }
+
+    if (!videoId) {
+        throw new ApiError(404, "videoId is required")
+    }
+
+    const result = await User.findByIdAndUpdate(userId,
+        { $addToSet: { watchHistory: videoId } },
+        { new: true, useFindAndModify: false }
+    )
+
+    if(!result){
+       throw new ApiError("got error while updating watch history")
+    }
+
+    res
+    .status(200)
+    .json(new ApiResponse(200,"video added to watche history",result))
+
+})
+
 const getWatchHistory = asyncHandler(async (req, res) => {
     const user = await User.aggregate([
         {
@@ -627,5 +647,6 @@ export {
     getUserChannelProfile,
     getWatchHistory,
     getUserById,
-    loginUsingGoogle
+    loginUsingGoogle,
+    addVideosToWatchHistory
 }

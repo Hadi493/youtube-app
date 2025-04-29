@@ -9,7 +9,7 @@ function VideoDashboard() {
   const [toggleDelete, setToggleDelete] = useState("hidden")
   const showUploadVideoCss = useHandleCssStore((state) => state.showUploadVideoCss)
   const showUploadVideo = useHandleCssStore((state) => state.showUploadVideo)
-  // console.log(showUploadVideoCss)
+  console.log(showUploadVideoCss)
 
   useEffect(() => {
     function handleClickOutside(e) {
