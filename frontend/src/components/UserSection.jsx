@@ -6,7 +6,6 @@ import { watchHistory } from "../api/authentication/authApi";
 import formatTimeDifference from "../hooks/formateTime";
 import { getPlaylistsOfUser } from "../api/playlist/playlist";
 import { getVideobyId } from "../api/videos/videoApi";
-import { Vibrant } from "@vibrant/core";
 
 const PlaylistItem = ({ value }) => {
   const navigate = useNavigate();
